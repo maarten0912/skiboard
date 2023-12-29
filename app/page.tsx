@@ -12,8 +12,8 @@ const SCOPES = [
 ];
 
 const jwt = new JWT({
-  email: process.env.client_email,
-  key: process.env.private_key,
+  email: process.env.CLIENT_EMAIL,
+  key: process.env.PRIVATE_KEY,
   scopes: SCOPES,
 });
 
