@@ -9,9 +9,7 @@ const nextConfig = {
         };
     
         return config;
-      },
-    output: "export",
-    basePath: ""
+      }
 }
 
 module.exports = nextConfig
