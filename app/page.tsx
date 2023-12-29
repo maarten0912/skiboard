@@ -1,7 +1,5 @@
 'use client'
 
-import jsonData from './data.json'
-import googleSecret from '../google-secret.json'
 import React, { useState, useEffect } from 'react'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 import { JWT } from 'google-auth-library';
@@ -14,8 +12,8 @@ const SCOPES = [
 ];
 
 const jwt = new JWT({
-  email: googleSecret.client_email,
-  key: googleSecret.private_key,
+  email: process.env.client_email,
+  key: process.env.private_key,
   scopes: SCOPES,
 });
 
