@@ -146,12 +146,15 @@ export default function Home() {
     setUser(selection)
   }
 
-  const zones = [
+  const zonesLesArc = [
     "Arc 1600",
     "Arc 1800",
     "Arc 2000",
     "Peisey Vallandry",
-    "Villarogers",
+    "Villarogers"
+  ]
+
+  const zonesLaPlagne = [
     "Altitude Domain",
     "Champagny en Vanoise",
     "Plagne Montalbert",
@@ -161,7 +164,7 @@ export default function Home() {
   return (
     <main className="flex font-sans min-h-screen flex-col items-center p-2">
 
-      <select name={areaFilter} onChange={e => setUserFunction(e.target.value)} className="font-bold py-1 px-2 m-1 rounded w-full">
+      <select name={areaFilter} onChange={e => setUserFunction(e.target.value)} className="font-bold bg-gray-100 dark:bg-gray-700 py-1 px-2 m-1 rounded w-full">
         <option value="">Ik ben...</option>
         <option value="Brigitte">Brigitte</option>
         <option value="Chris">Chris</option>
@@ -181,27 +184,31 @@ export default function Home() {
       {user == "" ? null :
         <div>
           <div className="flex flex-row justify-between">
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 m-1 rounded" onClick={() => setGreenFilter(!greenFilter)}>Groen</button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 m-1 rounded" onClick={() => setBlueFilter(!blueFilter)}>Blauw</button>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 m-1 rounded" onClick={() => setRedFilter(!redFilter)}>Rood</button>
-            <button className="bg-gray-800 hover:bg-black text-white font-bold py-1 px-2 m-1 rounded" onClick={() => setBlackFilter(!blackFilter)}>Zwart</button>
+            <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-green-600 ${greenFilter ? "bg-green-600 hover:border-green-800 hover:bg-green-800 text-white" : "text-green-600 hover:text-green-800 hover:border-green-800"}`} onClick={() => setGreenFilter(!greenFilter)}>Groen</button>
+            <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-blue-600 ${blueFilter ? "bg-blue-600 hover:border-blue-800 hover:bg-blue-800 text-white" : "text-blue-600 hover:text-blue-800 hover:border-blue-800"}`} onClick={() => setBlueFilter(!blueFilter)}>Blauw</button>
+            <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-red-600 ${redFilter ? "bg-red-600 hover:border-red-800 hover:bg-red-800 text-white" : "text-red-600 hover:text-red-800 hover:border-red-800"}`} onClick={() => setRedFilter(!redFilter)}>Rood</button>
+            <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-gray-800 dark:border-gray-600 ${blackFilter ? "bg-gray-800 dark:bg-gray-600 hover:border-black dark:hover:border-gray-800 hover:bg-black dark:hover:bg-gray-800 text-white" : "text-gray-800 dark:text-gray-600 hover:text-black dark:hover:text-gray-800 hover:border-black dark:hover:border-gray-800"}`} onClick={() => setBlackFilter(!blackFilter)}>Zwart</button>
           </div>
-          <select name={areaFilter} onChange={e => setAreaFilter(e.target.value)} className="font-bold py-1 px-2 m-1 rounded w-full">
+          <select name={areaFilter} onChange={e => setAreaFilter(e.target.value)} className="font-bold bg-gray-100 dark:bg-gray-700 py-1 px-2 m-1 rounded w-full">
             <option value="none">Filter een gebied...</option>
             <option value="Les Arcs">Les Arcs</option>
             <option value="La Plagne">La Plagne</option>
           </select>
-          <select name={zoneFilter} onChange={e => setZoneFilter(e.target.value)} className="font-bold py-1 px-2 m-1 rounded w-full">
+          <select name={zoneFilter} onChange={e => setZoneFilter(e.target.value)} className="font-bold bg-gray-100 dark:bg-gray-700 py-1 px-2 m-1 rounded w-full">
             <option value="none">Filter een zone...</option>
-            {zones.map((item, index) => (
+            {(areaFilter == "none" || areaFilter == 'Les Arcs') && zonesLesArc.map((item, index) => (
               <option value={item} key={index}>{item}</option>
             ))}
+            {(areaFilter == "none" || areaFilter == 'La Plagne') && zonesLaPlagne.map((item, index) => (
+              <option value={item} key={index}>{item}</option>
+            ))}
+
           </select>
         </div>
       }
 
       {user != "" && slopes.filter(e => colorFilterFunction(e) && areaFilterFunction(e) && zoneFilterFunction(e)).map((item, index) => (
-        <button className="flex flex-row my-2 p-1 hover:bg-yellow-100 rounded-lg" key={index} onClick={() => clickSlopeFunction(item)}>
+        <button className="flex flex-row my-2 p-1 hover:bg-yellow-100 hover:text-black rounded-lg" key={index} onClick={() => clickSlopeFunction(item)}>
           <div className={`w-4 h-4 self-center rounded-full px-1 ${stringToCss[item.color]}`}></div>
           <div className="text-2xl self-center font-bold px-1">{item.name}</div>
           <div className="text-sm italic px-1 self-start">{item.zone}</div>
@@ -209,7 +216,7 @@ export default function Home() {
       ))}
 
       {user != "" && finishedSlopes.filter(e => colorFilterFunction(e) && areaFilterFunction(e) && zoneFilterFunction(e)).map((item, index) => (
-        <button className="flex flex-row my-2 p-1 bg-yellow-200 hover:bg-yellow-400 rounded-lg" key={index} onClick={() => clickFinishedSlopeFunction(item)}>
+        <button className="flex flex-row my-2 p-1 bg-yellow-200 hover:bg-yellow-400 text-black rounded-lg" key={index} onClick={() => clickFinishedSlopeFunction(item)}>
           <div className={`w-4 h-4 self-center rounded-full px-1 ${stringToCss[item.color]}`}></div>
           <div className="text-2xl self-center font-bold px-1">{item.name}</div>
           <div className="text-sm italic px-1 self-start">{item.zone}</div>
