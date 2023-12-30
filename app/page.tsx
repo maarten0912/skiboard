@@ -21,6 +21,7 @@ const jwt = new JWT({
 // Sheets config variables
 const SPREADSHEET_ID = "1-BlGsmxcBeYy4PebLfrRTBdpfqUh7kwx8rrBx0uauwc"
 const SHEET_ID = "405578724"
+const SCORE_SHEET_ID = "1629183134"
 
 const doc = new GoogleSpreadsheet(SPREADSHEET_ID, jwt)
 
@@ -62,6 +63,7 @@ export default function Home() {
   const [finishedSlopes, setFinishedSlopes] = useState<Slope[]>([])
 
   const [user, setUser] = useState("")
+  const [userScore, setUserScore] = useState(0)
 
   useEffect(() => {
     doc.loadInfo().then(async () => {
@@ -90,6 +92,13 @@ export default function Home() {
 
     })
   }, [user])
+
+  useEffect(() => {
+    doc.loadInfo().then(async () => {
+      const rows = await doc.sheetsById[SCORE_SHEET_ID].getRows()
+      setUserScore(rows[2].get(user))
+    })
+  }, [user, finishedSlopes])
 
   function slopeSort(a: Slope, b: Slope) {
     return b.area.localeCompare(a.area) || a.zone.localeCompare(b.zone) || colorOrder.indexOf(a.color) - colorOrder.indexOf(b.color) || a.name.localeCompare(b.name)
@@ -155,10 +164,13 @@ export default function Home() {
   ]
 
   const zonesLaPlagne = [
-    "Altitude Domain",
+    "Plagne Centre",
+    "Plagne Bellecote",
     "Champagny en Vanoise",
+    "Montchavin - Les Coches",
     "Plagne Montalbert",
-    "Montchavin - Les Coches"
+    "Plagne Aime 2000",
+    "Live 3000"
   ]
 
   return (
@@ -188,6 +200,7 @@ export default function Home() {
             <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-blue-600 ${blueFilter ? "bg-blue-600 hover:border-blue-800 hover:bg-blue-800 text-white" : "text-blue-600 hover:text-blue-800 hover:border-blue-800"}`} onClick={() => setBlueFilter(!blueFilter)}>Blauw</button>
             <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-red-600 ${redFilter ? "bg-red-600 hover:border-red-800 hover:bg-red-800 text-white" : "text-red-600 hover:text-red-800 hover:border-red-800"}`} onClick={() => setRedFilter(!redFilter)}>Rood</button>
             <button className={`font-bold py-1 px-2 m-1 rounded border-2 border-gray-800 dark:border-gray-600 ${blackFilter ? "bg-gray-800 dark:bg-gray-600 hover:border-black dark:hover:border-gray-800 hover:bg-black dark:hover:bg-gray-800 text-white" : "text-gray-800 dark:text-gray-600 hover:text-black dark:hover:text-gray-800 hover:border-black dark:hover:border-gray-800"}`} onClick={() => setBlackFilter(!blackFilter)}>Zwart</button>
+            <div className="flex items-center justify-center font-bold absolute right-0 w-auto h-10 mx-5 rounded-full border-2 border-yellow-500 text-yellow-500 px-2 min-w-10">{userScore}</div>
           </div>
           <select name={areaFilter} onChange={e => setAreaFilter(e.target.value)} className="font-bold bg-gray-100 dark:bg-gray-700 py-1 px-2 m-1 rounded w-full">
             <option value="none">Filter een gebied...</option>
