@@ -81,6 +81,49 @@ export default function Home() {
   const [user, setUser] = useState("")
   const [userScore, setUserScore] = useState(0)
 
+  const [scoreboard, setScoreBoard] = useState({
+    Pepijn: 0,
+    Maarten: 0,
+    Chris: 0,
+    Brigitte: 0,
+    Joëlle: 0,
+    Daniël: 0,
+    Sifra: 0,
+    Karianne: 0,
+    Christiaan: 0,
+    Melle: 0,
+    Inge: 0
+  })
+
+
+  useEffect(() => {
+    doc.loadInfo().then(async () => {
+      const rows = await doc.sheetsById[SCORE_SHEET_ID].getRows()
+
+      const users = [
+        "Pepijn",
+        "Maarten",
+        "Chris",
+        "Brigitte",
+        "Joëlle",
+        "Daniël",
+        "Sifra",
+        "Karianne",
+        "Christiaan",
+        "Melle",
+        "Inge"
+      ]
+
+      users.map(userIterator => {
+        setScoreBoard(prevState => ({
+          ...prevState,
+          [userIterator]: rows[2].get(userIterator)
+        }))
+      })
+
+    })
+  }, [])
+
   useEffect(() => {
     if (user == "") {
       return
@@ -98,7 +141,7 @@ export default function Home() {
       // alert(slopesData[slopesData.length - 1].slopeIndex)
       slopesData.sort(slopeSort)
 
-      await doc.sheetsById[SHEET_ID].loadCells(userColoms[user] + '2:' + userColoms[user] + '261')
+      await doc.sheetsById[SHEET_ID].loadCells(userColoms[user] + '2:' + userColoms[user])
       
       const finishedSlopesData: Slope[] = []
       slopesData.forEach(slope => {
@@ -212,6 +255,29 @@ export default function Home() {
         <option value="Inge">Inge</option>
         <option value="Melle">Melle</option>
       </select>
+
+      {/*Display scoreboard if username is NOT set */}
+
+      {user == "" ?
+        <div>
+        <table className="table-auto">
+          <thead>
+            <tr>
+              <th className="px-4 py-2">Username</th>
+              <th className="px-4 py-2">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(scoreboard).sort((a,b) => b[1] - a[1]).map(([username, score], index) => (
+              <tr key={index} className={index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}>
+                <td className="border px-4 py-2">{username}</td>
+                <td className="border px-4 py-2">{score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </div>
+      : null }
 
       {/* Only display page if username is set */}
 
