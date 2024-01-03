@@ -269,7 +269,7 @@ export default function Home() {
           </thead>
           <tbody>
             {Object.entries(scoreboard).sort((a,b) => b[1] - a[1]).map(([username, score], index) => (
-              <tr key={index} className={index % 2 === 0 ? 'bg-gray-200' : 'bg-white'}>
+              <tr key={index} className={index % 2 === 0 ? 'bg-gray-200 dark:bg-gray-800' : 'bg-white dark:bg-gray-600'}>
                 <td className="border px-4 py-2">{username}</td>
                 <td className="border px-4 py-2">{score}</td>
               </tr>
