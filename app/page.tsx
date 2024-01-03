@@ -225,7 +225,7 @@ export default function Home() {
     "Arc 1800",
     "Arc 2000",
     "Peisey Vallandry",
-    "Villarogers"
+    "Villaroger"
   ]
 
   const zonesLaPlagne = [
